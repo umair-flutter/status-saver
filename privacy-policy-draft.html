@@ -1,0 +1,425 @@
+<title>Status Saver Privacy</title>
+<style>
+  :root{
+    --bg:#F6F5F0;
+    --surface:#FFFFFF;
+    --surface-2:#EFEEE6;
+    --ink:#1B211D;
+    --ink-soft:#4B5750;
+    --line:#DEDCD0;
+    --accent:#0E7C6B;
+    --accent-ink:#FFFFFF;
+    --accent-soft:#E1F1EC;
+    --accent-soft-ink:#0B5C4F;
+    --mono-ink:#6B7A73;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#101613;
+      --surface:#171E1A;
+      --surface-2:#1D2521;
+      --ink:#EAEDE9;
+      --ink-soft:#AEB8B1;
+      --line:#2B332E;
+      --accent:#4FD9BE;
+      --accent-ink:#08231D;
+      --accent-soft:#1C332C;
+      --accent-soft-ink:#8FE9D3;
+      --mono-ink:#7C8B83;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#101613;
+    --surface:#171E1A;
+    --surface-2:#1D2521;
+    --ink:#EAEDE9;
+    --ink-soft:#AEB8B1;
+    --line:#2B332E;
+    --accent:#4FD9BE;
+    --accent-ink:#08231D;
+    --accent-soft:#1C332C;
+    --accent-soft-ink:#8FE9D3;
+    --mono-ink:#7C8B83;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    font-size:16px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2{
+    font-family:"Fraunces","Public Sans",serif;
+    text-wrap:balance;
+    letter-spacing:-0.01em;
+  }
+
+  a{color:var(--accent);}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+
+  .wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding-inline:20px;
+  }
+
+  header.top{
+    border-bottom:1px solid var(--line);
+    background:var(--surface);
+  }
+  .top-inner{
+    max-width:760px;
+    margin:0 auto;
+    padding:28px 20px 24px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .brandrow{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .mark{
+    width:40px;height:40px;border-radius:11px;
+    background:linear-gradient(155deg,var(--accent),var(--accent-soft-ink));
+    display:flex;align-items:center;justify-content:center;
+    flex:none;
+  }
+  .mark svg{width:22px;height:22px;}
+  .brandrow strong{font-size:1.05rem;letter-spacing:-0.01em;}
+  .eyebrow{
+    font-family:"Roboto Mono",ui-monospace,monospace;
+    font-size:0.72rem;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    color:var(--mono-ink);
+  }
+  h1.title{
+    font-size:clamp(1.7rem,4.5vw,2.3rem);
+    margin:2px 0 0;
+    font-weight:600;
+  }
+  .meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 18px;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+  }
+  .meta span b{color:var(--ink);font-weight:600;}
+
+  nav.toc{
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px 18px;
+    margin:26px 0 8px;
+  }
+  nav.toc .eyebrow{margin-bottom:8px;display:block;}
+  nav.toc ol{
+    margin:0;
+    padding-left:0;
+    list-style:none;
+    columns:2;
+    column-gap:20px;
+    counter-reset:toc;
+  }
+  nav.toc li{
+    counter-increment:toc;
+    break-inside:avoid;
+    margin-bottom:7px;
+    font-size:0.87rem;
+  }
+  nav.toc li a{
+    color:var(--ink-soft);
+    text-decoration:none;
+  }
+  nav.toc li a:hover{color:var(--accent);}
+  nav.toc li a::before{
+    content:counter(toc,decimal-leading-zero)"  ";
+    font-family:"Roboto Mono",ui-monospace,monospace;
+    color:var(--accent);
+    font-size:0.78rem;
+  }
+
+  main{padding:8px 0 80px;}
+  section{
+    padding:30px 0;
+    border-bottom:1px solid var(--line);
+    scroll-margin-top:22px;
+  }
+  section:last-of-type{border-bottom:none;}
+  section h2{
+    font-size:1.32rem;
+    margin:0 0 4px;
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+  }
+  section h2 .num{
+    font-family:"Roboto Mono",ui-monospace,monospace;
+    color:var(--accent);
+    font-size:0.95rem;
+    font-weight:500;
+  }
+  section p{margin:12px 0;color:var(--ink);}
+  section p.lede{color:var(--ink-soft);}
+  section ul{margin:12px 0;padding-left:22px;}
+  section li{margin:6px 0;}
+  section li::marker{color:var(--accent);}
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px 18px;
+    margin:16px 0;
+  }
+  .permtable{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px 18px;
+    margin:18px 0;
+  }
+  @media (max-width:520px){ .permtable{grid-template-columns:1fr;} nav.toc ol{columns:1;} }
+  .permtable .row{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:13px 15px;
+  }
+  .permtable .row .k{
+    font-family:"Roboto Mono",ui-monospace,monospace;
+    font-size:0.72rem;
+    letter-spacing:0.04em;
+    color:var(--accent-soft-ink);
+    background:var(--accent-soft);
+    display:inline-block;
+    padding:2px 8px;
+    border-radius:999px;
+    margin-bottom:8px;
+  }
+  .permtable .row p{margin:0;font-size:0.9rem;color:var(--ink-soft);}
+
+  .sdktable{width:100%;border-collapse:collapse;margin:16px 0;font-size:0.9rem;}
+  .sdktable th,.sdktable td{
+    text-align:left;
+    padding:10px 12px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  .sdktable th{
+    font-family:"Roboto Mono",ui-monospace,monospace;
+    font-size:0.72rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--mono-ink);
+    font-weight:500;
+  }
+  .sdktable tr:last-child td{border-bottom:none;}
+  .tablewrap{overflow-x:auto;}
+
+  .pill{
+    display:inline-flex;align-items:center;gap:6px;
+    background:var(--accent-soft);color:var(--accent-soft-ink);
+    font-size:0.78rem;font-weight:600;
+    padding:4px 11px;border-radius:999px;
+    margin:2px 6px 2px 0;
+  }
+
+  footer{
+    padding:34px 0 54px;
+    color:var(--mono-ink);
+    font-size:0.85rem;
+    border-top:1px solid var(--line);
+  }
+  footer a{color:var(--ink-soft);}
+
+  .backtotop{
+    position:fixed;
+    right:18px;
+    bottom:calc(18px + env(safe-area-inset-bottom,0px));
+    background:var(--accent);
+    color:var(--accent-ink);
+    width:42px;height:42px;border-radius:50%;
+    border:none;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 18px rgba(0,0,0,0.18);
+    cursor:pointer;
+    opacity:0;pointer-events:none;
+    transition:opacity .2s ease;
+  }
+  .backtotop.show{opacity:1;pointer-events:auto;}
+  @media (prefers-reduced-motion:reduce){ .backtotop{transition:none;} }
+</style>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brandrow">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v11m0 0l-4-4m4 4l4-4M5 18h14" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <strong>Status Saver: Photo &amp; Video</strong>
+    </div>
+    <div>
+      <span class="eyebrow">Privacy Policy</span>
+      <h1 class="title">How Status Saver handles your data</h1>
+    </div>
+    <div class="meta">
+      <span>Effective: <b>September 17, 2026</b></span>
+      <span>Applies to package: <b>com.umairkhalid.statussaver</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="toc" aria-label="Table of contents">
+    <span class="eyebrow">On this page</span>
+    <ol>
+      <li><a href="#scope">Scope of this policy</a></li>
+      <li><a href="#storage">Media &amp; storage access</a></li>
+      <li><a href="#permissions">Permissions we request</a></li>
+      <li><a href="#thirdparty">Third-party services</a></li>
+      <li><a href="#ads">Advertising &amp; your choices</a></li>
+      <li><a href="#analytics">Analytics &amp; crash reports</a></li>
+      <li><a href="#purchases">In-app purchases</a></li>
+      <li><a href="#notifications">Notifications</a></li>
+      <li><a href="#retention">Data retention &amp; security</a></li>
+      <li><a href="#children">Children's privacy</a></li>
+      <li><a href="#rights">Your rights (GDPR / CCPA)</a></li>
+      <li><a href="#changes">Changes to this policy</a></li>
+      <li><a href="#contact">Contact us</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <section id="scope">
+      <h2><span class="num">01</span> Scope of this policy</h2>
+      <p class="lede">This policy covers the Status Saver: Photo &amp; Video Android app ("the app"), published under package name <code>com.umairkhalid.statussaver</code>. It explains what the app accesses on your device, what it sends to third-party services, and the choices you have.</p>
+      <p>The app is a utility for viewing and saving WhatsApp status media that WhatsApp already stores on your own device. Status Saver is an independent app and is not produced, endorsed, or affiliated with WhatsApp Inc. or Meta Platforms, Inc.</p>
+    </section>
+
+    <section id="storage">
+      <h2><span class="num">02</span> Media &amp; storage access</h2>
+      <p>To show you the photos and videos currently in WhatsApp's status folder, the app reads media files stored on your device. When you tap "Save," the app copies that file to a folder in your device's own Pictures library so it survives after the original status expires.</p>
+      <p><strong>We do not upload, transmit, or store copies of your photos or videos on any server we control.</strong> All status media stays on your device unless you personally choose to share a file using your phone's share menu.</p>
+    </section>
+
+    <section id="permissions">
+      <h2><span class="num">03</span> Permissions we request</h2>
+      <div class="permtable">
+        <div class="row">
+          <span class="k">Photos &amp; videos</span>
+          <p>To find and display WhatsApp status media, and to save the ones you choose.</p>
+        </div>
+        <div class="row">
+          <span class="k">Notifications</span>
+          <p>To alert you when a new status becomes available, if you leave this on.</p>
+        </div>
+        <div class="row">
+          <span class="k">Internet</span>
+          <p>Required by the ad, analytics, and crash-reporting SDKs described below.</p>
+        </div>
+        <div class="row">
+          <span class="k">Run in background</span>
+          <p>Used briefly to watch for new status files and post the notification above.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="thirdparty">
+      <h2><span class="num">04</span> Third-party services</h2>
+      <p class="lede">The app includes software development kits (SDKs) from the providers below. Each operates under its own privacy policy, linked here for reference.</p>
+      <div class="tablewrap">
+        <table class="sdktable">
+          <thead><tr><th>Provider</th><th>Purpose</th><th>Policy</th></tr></thead>
+          <tbody>
+            <tr><td>Google AdMob</td><td>Shows banner, interstitial, and native ads</td><td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a></td></tr>
+            <tr><td>Google Firebase (Analytics &amp; Crashlytics)</td><td>App usage statistics and crash diagnostics</td><td><a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">firebase.google.com/support/privacy</a></td></tr>
+            <tr><td>Meta Audience Network</td><td>Ad SDK included for future use; disabled by default</td><td><a href="https://www.facebook.com/privacy/policy" target="_blank" rel="noopener">facebook.com/privacy/policy</a></td></tr>
+            <tr><td>Unity Ads</td><td>Ad SDK included for future use; disabled by default</td><td><a href="https://unity.com/legal/privacy-policy" target="_blank" rel="noopener">unity.com/legal/privacy-policy</a></td></tr>
+            <tr><td>Google Play Billing</td><td>Processes the optional "Remove Ads" purchase</td><td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="ads">
+      <h2><span class="num">05</span> Advertising &amp; your choices</h2>
+      <p>The app shows ads through Google AdMob to support free use of the app. AdMob may use your advertising ID and general device information to show ads relevant to you.</p>
+      <p>You can limit ad personalization at any time:</p>
+      <ul>
+        <li>Android Settings → Privacy → Ads → <em>Delete advertising ID</em> or <em>Opt out of ads personalization</em></li>
+        <li>Purchase "Remove Ads" inside the app to stop ads entirely</li>
+      </ul>
+      <p>If you're in the European Economic Area or United Kingdom, the app will ask for your consent before showing personalized ads, in line with applicable law.</p>
+    </section>
+
+    <section id="analytics">
+      <h2><span class="num">06</span> Analytics &amp; crash reports</h2>
+      <p>The app uses Firebase Analytics to understand aggregate usage (for example, which screens are opened) and Firebase Crashlytics to automatically report crashes so we can fix bugs. These reports may include device model, OS version, app version, and a stack trace of the crash — they do not include your status photos or videos.</p>
+    </section>
+
+    <section id="purchases">
+      <h2><span class="num">07</span> In-app purchases</h2>
+      <p>The optional "Remove Ads" purchase is processed entirely by Google Play Billing. We do not see or store your payment details — Google handles billing and shares only the purchase status with the app.</p>
+    </section>
+
+    <section id="notifications">
+      <h2><span class="num">08</span> Notifications</h2>
+      <p>If you grant notification permission, the app can alert you when new status media appears. You can disable this at any time in Android Settings → Apps → Status Saver → Notifications.</p>
+    </section>
+
+    <section id="retention">
+      <h2><span class="num">09</span> Data retention &amp; security</h2>
+      <p>Status media you save stays on your device under your control until you delete it. Analytics and crash data are retained by Firebase according to Google's standard retention periods and are not sold to third parties.</p>
+    </section>
+
+    <section id="children">
+      <h2><span class="num">10</span> Children's privacy</h2>
+      <p>Status Saver is not directed at children under 13, and we do not knowingly collect personal information from children. If you believe a child has provided us data, contact us and we'll remove it.</p>
+    </section>
+
+    <section id="rights">
+      <h2><span class="num">11</span> Your rights (GDPR / CCPA)</h2>
+      <p>Depending on where you live, you may have the right to access, correct, or delete data associated with you, and to object to certain processing. Because the app doesn't require an account or collect personal profile data directly, most of this data lives with our third-party providers (Google, Meta, Unity) — you can exercise these rights directly with them, or contact us and we'll help route the request.</p>
+    </section>
+
+    <section id="changes">
+      <h2><span class="num">12</span> Changes to this policy</h2>
+      <p>We may update this policy as the app changes. Material changes will be reflected by updating the "Effective" date at the top of this page.</p>
+    </section>
+
+    <section id="contact">
+      <h2><span class="num">13</span> Contact us</h2>
+      <p>Questions about this policy or your data? Reach out:</p>
+      <div class="card">
+        <span class="pill">✉ umairkhaliddeveloper@gmail.com</span>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 Status Saver: Photo &amp; Video. This policy is provided for transparency about app data practices and general Play Store compliance guidance, not as a substitute for legal advice.</p>
+  </footer>
+</div>
+
+<button class="backtotop" id="toTop" aria-label="Back to top">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+<script>
+(function(){
+  try{
+    var btn=document.getElementById('toTop');
+    window.addEventListener('scroll',function(){
+      if(window.scrollY>500){btn.classList.add('show');}else{btn.classList.remove('show');}
+    },{passive:true});
+    btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+  }catch(e){}
+})();
+</script>
